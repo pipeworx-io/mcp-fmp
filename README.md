@@ -1,14 +1,14 @@
 # mcp-fmp
 
-Financial Modeling Prep MCP.
+Financial Modeling Prep MCP (/stable API; v3 deprecated 2025-08-31).
 
-Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 250+ live data sources.
+Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 673+ live data sources.
 
 ## Tools
 
 | Tool | Description |
 |------|-------------|
-| `historical_price` | Daily history. |
+| `historical_price` | Daily EOD history. |
 
 ## Quick Start
 
@@ -24,7 +24,7 @@ Add to your MCP client (Claude Desktop, Cursor, Windsurf, etc.):
 }
 ```
 
-Or connect to the full Pipeworx gateway for access to all 250+ data sources:
+Or connect to the full Pipeworx gateway for access to all 673+ data sources:
 
 ```json
 {
