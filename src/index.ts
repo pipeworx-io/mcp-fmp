@@ -17,45 +17,48 @@ interface McpToolExport {
 }
 
 /**
- * Financial Modeling Prep MCP.
+ * Financial Modeling Prep MCP (/stable API; v3 deprecated 2025-08-31).
+ *
+ * FMP migrated free-tier endpoints in August 2025. Many endpoints that were
+ * free under v3 now require a paid plan (Starter/Premium). The pack surfaces
+ * HTTP 402 with a hint to upgrade rather than swallowing the error.
  */
 
 
-const BASE = 'https://financialmodelingprep.com/api/v3';
+const BASE = 'https://financialmodelingprep.com/stable';
 const UA = 'pipeworx-mcp-fmp/1.0 (+https://pipeworx.io)';
 
 const passthrough = { type: 'object' as const, properties: {}, additionalProperties: true };
 
 const tools: McpToolExport['tools'] = [
-  { name: 'profile', description: 'Company profile.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
-  { name: 'quote', description: 'Current quote (comma-sep for batch).', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
-  { name: 'quote_short', description: 'Minimal quote.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
+  { name: 'profile', description: 'Fetch FMP company profile for a ticker symbol, including sector, industry, description, CEO, employee count, website, market cap, and exchange listing details.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
+  { name: 'quote', description: 'Fetch the current real-time quote for a ticker symbol from FMP, including price, change, percent change, day range, 52-week range, volume, and market cap.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
+  { name: 'quote_short', description: 'Fetch a lightweight FMP quote for a ticker symbol returning only price, volume, and percent change; use when only the current price is needed.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
   {
     name: 'historical_price',
-    description: 'Daily history.',
-    inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, from: { type: 'string' }, to: { type: 'string' }, serietype: { type: 'string' } }, required: ['symbol'] },
+    description: 'Daily EOD history.',
+    inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, from: { type: 'string' }, to: { type: 'string' } }, required: ['symbol'] },
   },
-  { name: 'intraday', description: 'Intraday OHLC.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, interval: { type: 'string' } }, required: ['symbol', 'interval'] } },
+  { name: 'intraday', description: 'Intraday OHLC (paid).', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, interval: { type: 'string' } }, required: ['symbol', 'interval'] } },
   { name: 'income_statement', description: 'Income statement.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, period: { type: 'string' }, limit: { type: 'number' } }, required: ['symbol'] } },
   { name: 'balance_sheet', description: 'Balance sheet.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, period: { type: 'string' }, limit: { type: 'number' } }, required: ['symbol'] } },
-  { name: 'cash_flow', description: 'Cash flow.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, period: { type: 'string' }, limit: { type: 'number' } }, required: ['symbol'] } },
+  { name: 'cash_flow', description: 'Financial Modeling Prep cash-flow statement for a US-listed ticker: operating, investing, financing activities, free cash flow, capex, net change in cash. Annual (period=annual) or quarterly. Use for fundamental analysis, DCF inputs, cash-flow valuation.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, period: { type: 'string' }, limit: { type: 'number' } }, required: ['symbol'] } },
   { name: 'ratios', description: 'Financial ratios.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, period: { type: 'string' }, limit: { type: 'number' } }, required: ['symbol'] } },
   { name: 'enterprise_value', description: 'Enterprise value.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, period: { type: 'string' }, limit: { type: 'number' } }, required: ['symbol'] } },
   { name: 'key_metrics', description: 'TTM key metrics.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, period: { type: 'string' }, limit: { type: 'number' } }, required: ['symbol'] } },
   { name: 'financial_growth', description: 'Growth rates.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, period: { type: 'string' }, limit: { type: 'number' } }, required: ['symbol'] } },
-  { name: 'search', description: 'Symbol search.', inputSchema: { type: 'object', properties: { query: { type: 'string' }, limit: { type: 'number' }, exchange: { type: 'string' } }, required: ['query'] } },
-  { name: 'search_ticker', description: 'Ticker search.', inputSchema: { type: 'object', properties: { query: { type: 'string' }, limit: { type: 'number' }, exchange: { type: 'string' } }, required: ['query'] } },
-  { name: 'stock_screener', description: 'Stock screener.', inputSchema: passthrough },
-  { name: 'available_symbols', description: 'Full symbol list.', inputSchema: { type: 'object', properties: {} } },
-  { name: 'stock_news', description: 'News.', inputSchema: { type: 'object', properties: { tickers: { type: 'string' }, page: { type: 'number' }, limit: { type: 'number' } } } },
-  { name: 'earnings_calendar', description: 'Earnings calendar.', inputSchema: { type: 'object', properties: { from: { type: 'string' }, to: { type: 'string' } } } },
-  { name: 'economic_calendar', description: 'Economic events calendar.', inputSchema: { type: 'object', properties: { from: { type: 'string' }, to: { type: 'string' } } } },
-  { name: 'ipos', description: 'IPO calendar.', inputSchema: { type: 'object', properties: { from: { type: 'string' }, to: { type: 'string' } } } },
-  { name: 'mergers', description: 'M&A.', inputSchema: { type: 'object', properties: { page: { type: 'number' } } } },
-  { name: 'delisted', description: 'Delisted companies.', inputSchema: { type: 'object', properties: {} } },
-  { name: 'insider_trading', description: 'Insider trading.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, page: { type: 'number' }, limit: { type: 'number' } } } },
-  { name: 'institutional_holders', description: 'Institutional holders.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
-  { name: 'etf_holders', description: 'ETF holders.', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
+  { name: 'search_symbol', description: 'Symbol search.', inputSchema: { type: 'object', properties: { query: { type: 'string' }, limit: { type: 'number' }, exchange: { type: 'string' } }, required: ['query'] } },
+  { name: 'search_name', description: 'Company-name search.', inputSchema: { type: 'object', properties: { query: { type: 'string' }, limit: { type: 'number' }, exchange: { type: 'string' } }, required: ['query'] } },
+  { name: 'stock_screener', description: 'Stock screener (paid).', inputSchema: passthrough },
+  { name: 'stock_news', description: 'News (paid).', inputSchema: { type: 'object', properties: { symbols: { type: 'string' }, page: { type: 'number' }, limit: { type: 'number' } } } },
+  { name: 'earnings_calendar', description: 'Earnings calendar (paid).', inputSchema: { type: 'object', properties: { from: { type: 'string' }, to: { type: 'string' } } } },
+  { name: 'economic_calendar', description: 'Economic events (paid).', inputSchema: { type: 'object', properties: { from: { type: 'string' }, to: { type: 'string' } } } },
+  { name: 'ipos_calendar', description: 'IPO calendar (paid).', inputSchema: { type: 'object', properties: { from: { type: 'string' }, to: { type: 'string' } } } },
+  { name: 'mergers_acquisitions', description: 'Financial Modeling Prep recent M&A activity feed: announced deals with acquirer, target, value, date. Use for "who did $TICKER acquire", "recent deals in sector X", deal-flow monitoring.', inputSchema: { type: 'object', properties: { page: { type: 'number' } } } },
+  { name: 'delisted_companies', description: 'Delisted companies.', inputSchema: { type: 'object', properties: { limit: { type: 'number' } } } },
+  { name: 'insider_trading', description: 'Insider trading (paid).', inputSchema: { type: 'object', properties: { symbol: { type: 'string' }, page: { type: 'number' }, limit: { type: 'number' } } } },
+  { name: 'institutional_ownership', description: 'Institutional ownership (paid).', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
+  { name: 'etf_holdings', description: 'ETF holdings (paid).', inputSchema: { type: 'object', properties: { symbol: { type: 'string' } }, required: ['symbol'] } },
 ];
 
 async function callTool(name: string, args: Record<string, unknown>): Promise<unknown> {
@@ -66,6 +69,7 @@ async function callTool(name: string, args: Record<string, unknown>): Promise<un
     if (params) for (const [k, v] of Object.entries(params)) if (k !== '_apiKey' && v != null) p.set(k, String(v));
     const res = await fetch(`${BASE}${path}?${p}`, { headers: { Accept: 'application/json', 'User-Agent': UA } });
     if (res.status === 401 || res.status === 403) throw new Error('FMP: invalid API key.');
+    if (res.status === 402) throw new Error('FMP: 402 — this endpoint requires a paid plan. Free tier has changed since Aug 2025; upgrade at https://site.financialmodelingprep.com/pricing-plans.');
     if (res.status === 429) throw new Error('FMP: 429 rate limit (free tier 250/day).');
     if (!res.ok) throw new Error(`FMP: ${res.status}`);
     return res.json();
@@ -75,58 +79,56 @@ async function callTool(name: string, args: Record<string, unknown>): Promise<un
     if (typeof v !== 'string' || !v.trim()) throw new Error(`Required argument "${k}" is missing. Pass a string like ${ex}.`);
     return v;
   };
-  const sym = () => encodeURIComponent(reqStr('symbol', '"AAPL"'));
+  const symbol = () => reqStr('symbol', '"AAPL"');
   switch (name) {
     case 'profile':
-      return get(`/profile/${sym()}`);
+      return get('/profile', { symbol: symbol() });
     case 'quote':
-      return get(`/quote/${sym()}`);
+      return get('/quote', { symbol: symbol() });
     case 'quote_short':
-      return get(`/quote-short/${sym()}`);
+      return get('/quote-short', { symbol: symbol() });
     case 'historical_price':
-      return get(`/historical-price-full/${sym()}`, { from: args.from, to: args.to, serietype: args.serietype });
+      return get('/historical-price-eod/full', { symbol: symbol(), from: args.from, to: args.to });
     case 'intraday':
-      return get(`/historical-chart/${encodeURIComponent(reqStr('interval', '"1hour"'))}/${sym()}`);
+      return get(`/historical-chart/${encodeURIComponent(reqStr('interval', '"1hour"'))}`, { symbol: symbol() });
     case 'income_statement':
-      return get(`/income-statement/${sym()}`, { period: args.period, limit: args.limit });
+      return get('/income-statement', { symbol: symbol(), period: args.period, limit: args.limit });
     case 'balance_sheet':
-      return get(`/balance-sheet-statement/${sym()}`, { period: args.period, limit: args.limit });
+      return get('/balance-sheet-statement', { symbol: symbol(), period: args.period, limit: args.limit });
     case 'cash_flow':
-      return get(`/cash-flow-statement/${sym()}`, { period: args.period, limit: args.limit });
+      return get('/cash-flow-statement', { symbol: symbol(), period: args.period, limit: args.limit });
     case 'ratios':
-      return get(`/ratios/${sym()}`, { period: args.period, limit: args.limit });
+      return get('/ratios', { symbol: symbol(), period: args.period, limit: args.limit });
     case 'enterprise_value':
-      return get(`/enterprise-values/${sym()}`, { period: args.period, limit: args.limit });
+      return get('/enterprise-values', { symbol: symbol(), period: args.period, limit: args.limit });
     case 'key_metrics':
-      return get(`/key-metrics/${sym()}`, { period: args.period, limit: args.limit });
+      return get('/key-metrics', { symbol: symbol(), period: args.period, limit: args.limit });
     case 'financial_growth':
-      return get(`/financial-growth/${sym()}`, { period: args.period, limit: args.limit });
-    case 'search':
-      return get('/search', { query: reqStr('query', '"apple"'), limit: args.limit, exchange: args.exchange });
-    case 'search_ticker':
-      return get('/search-ticker', { query: reqStr('query', '"AAPL"'), limit: args.limit, exchange: args.exchange });
+      return get('/financial-growth', { symbol: symbol(), period: args.period, limit: args.limit });
+    case 'search_symbol':
+      return get('/search-symbol', { query: reqStr('query', '"AAPL"'), limit: args.limit, exchange: args.exchange });
+    case 'search_name':
+      return get('/search-name', { query: reqStr('query', '"apple"'), limit: args.limit, exchange: args.exchange });
     case 'stock_screener':
-      return get('/stock-screener', args);
-    case 'available_symbols':
-      return get('/available-traded/list');
+      return get('/company-screener', args);
     case 'stock_news':
-      return get('/stock_news', args);
+      return get('/news/stock', args);
     case 'earnings_calendar':
-      return get('/earning_calendar', args);
+      return get('/earnings-calendar', args);
     case 'economic_calendar':
-      return get('/economic_calendar', args);
-    case 'ipos':
-      return get('/ipo_calendar', args);
-    case 'mergers':
-      return get('/mergers-acquisitions-rss-feed', args);
-    case 'delisted':
-      return get('/delisted-companies');
+      return get('/economic-calendar', args);
+    case 'ipos_calendar':
+      return get('/ipos-calendar', args);
+    case 'mergers_acquisitions':
+      return get('/mergers-acquisitions-latest', args);
+    case 'delisted_companies':
+      return get('/delisted-companies', args);
     case 'insider_trading':
-      return get('/insider-trading', args);
-    case 'institutional_holders':
-      return get(`/institutional-holder/${sym()}`);
-    case 'etf_holders':
-      return get(`/etf-holder/${sym()}`);
+      return get('/insider-trading-search', args);
+    case 'institutional_ownership':
+      return get('/institutional-ownership/symbol-ownership', { symbol: symbol() });
+    case 'etf_holdings':
+      return get('/etf/holdings', { symbol: symbol() });
     default:
       throw new Error(`Unknown tool: ${name}`);
   }

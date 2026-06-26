@@ -1,7 +1,7 @@
 {
   "name": "@pipeworx/mcp-fmp",
   "version": "0.1.0",
-  "description": "Financial Modeling Prep MCP.",
+  "description": "Financial Modeling Prep MCP (/stable API; v3 deprecated 2025-08-31).",
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
