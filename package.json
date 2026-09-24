@@ -1,20 +1,32 @@
 {
   "name": "@pipeworx/mcp-fmp",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Financial Modeling Prep MCP (/stable API; v3 deprecated 2025-08-31).",
   "type": "module",
   "main": "src/index.ts",
   "types": "src/index.ts",
+  "bin": {
+    "mcp-fmp": "bin/cli.js"
+  },
   "keywords": ["mcp", "mcp-server", "model-context-protocol", "pipeworx", "fmp"],
   "license": "MIT",
   "repository": {
     "type": "git",
-    "url": "https://github.com/pipeworx-io/mcp-fmp"
+    "url": "git+https://github.com/pipeworx-io/mcp-fmp.git"
   },
   "scripts": {
     "typecheck": "tsc --noEmit"
   },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.30.0",
+    "tsx": "^4.19.0"
+  },
   "devDependencies": {
-    "typescript": "^5.7.0"
+    "typescript": "^5.9.3",
+    "@cloudflare/workers-types": "^4.20260405.1"
+  },
+  "pipeworx": {
+    "sourceHash": "v1-8913614748c079e883697fe6285ebdaa4660d09bca511d9d042c69fa37267bbc",
+    "sourceCommit": "76aa8f5d9b5dc2f665563030647c68e661478864"
   }
 }
