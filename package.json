@@ -1,6 +1,6 @@
 {
   "name": "@pipeworx/mcp-fmp",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Financial Modeling Prep MCP (/stable API; v3 deprecated 2025-08-31).",
   "type": "module",
   "main": "src/index.ts",
@@ -26,7 +26,7 @@
     "@cloudflare/workers-types": "^4.20260405.1"
   },
   "pipeworx": {
-    "sourceHash": "v1-8913614748c079e883697fe6285ebdaa4660d09bca511d9d042c69fa37267bbc",
-    "sourceCommit": "76aa8f5d9b5dc2f665563030647c68e661478864"
+    "sourceHash": "v1-a08ae2a49d30bbb2178dcf82c9e8ce55877fca32cf2c9fa5db64bbc1e42a5e5b",
+    "sourceCommit": "91681e9a4a137fa0051d58e32f38c64b6334af5c"
   }
 }
