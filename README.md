@@ -1,5 +1,7 @@
 # @pipeworx/fmp
 
+[![MCP Queen operational grade](https://mcpqueen.com/badge/io.github.pipeworx-io/fmp.svg)](https://mcpqueen.com/s/io.github.pipeworx-io/fmp)
+
 [Financial Modeling Prep v3](https://site.financialmodelingprep.com/developer/docs) MCP — company fundamentals, financial statements, ratios, valuation. Free 250 req/day.
 
 Part of [Pipeworx](https://pipeworx.io) — an MCP gateway connecting AI agents to 1683+ live data sources.
